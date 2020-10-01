@@ -1,11 +1,23 @@
-const Upcoming=()=>{
+import { Space,Spin } from 'antd';
+
+const Upcoming=(props)=>{
     return(
-        <div>
         <div className="container top">
-            <h1>Upcoming</h1>
-            <h1>...</h1>
+          <h1><b>Upcoming</b></h1>  
+        {props.upcomingLoading ? (<div style={{display:"flex",justifyContent:"center"}}>
+      <Space size="middle">
+      <Spin size="small" />
+      <Spin />
+      <Spin size="large" />
+    </Space>
+    </div>
+      ):(<div className="flex">
+        <h3>Upcoming</h3>
+        <h1>...</h1>
         </div>
-          </div>
+      )}
+          
+        </div>
     )
     }
     export default Upcoming;

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import Header from"../components/header";
-import Main from"../components/main";
+import Cover from"../components/cover";
 import Popular from"../components/popular";
 import Upcoming from"../components/upcoming";
 import TopRated from"../components/topRated";
+import MySearch from "../components/mySearch";
+import MyCard from "../components/myCard";
+
+
 const Home = () => {
   const [top, setTop] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -11,6 +14,8 @@ const Home = () => {
   const [topLoading, setTopLoading] = useState(true);
   const [upcomingLoading, setUpcomingLoading] = useState(true);
   const [popularLoading, setPopularLoading] = useState(true);
+  const [cover, setCover] = useState("");
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     fetch(
@@ -18,7 +23,7 @@ const Home = () => {
     )
       .then((response) => response.json())
       .then((result) => {
-        setTop(result);
+        setTop(result.results);
         setTopLoading(false);
       });
 
@@ -27,8 +32,15 @@ const Home = () => {
     )
       .then((response) => response.json())
       .then((result) => {
-        setUpcoming(result);
+        setUpcoming(result.results);
         setUpcomingLoading(false);
+        setCover({
+          img: `http://image.tmdb.org/t/p/original${result.results[0].backdrop_path}`,
+          title: result.results[0].title,
+          year: result.results[0].release_date,
+          popularity: result.results[0].popularity,
+          rate: result.results[0].vote_average,
+        });
       });
 
     fetch(
@@ -36,43 +48,84 @@ const Home = () => {
     )
       .then((response) => response.json())
       .then((result) => {
-        setPopular(result);
+        setPopular(result.results);
         setPopularLoading(false);
+      
       });
   }, []);
 
   return (
     <div>
-<Header/>
-<Main/>
-
-
-
-    {popularLoading ? (
-       <div>
-       <h1>Hey World POPULAR LOADING .........................</h1>
-     </div>
-      
-    ):(
-      <Popular/>
-    )}
-    {topLoading ? (
-       <div>
-       <h1>Hey World TOP RATED LOADING .........................</h1>
-     </div>
-      
-    ):(
-      <TopRated/>
-    )}
-    {upcomingLoading ? (
-       <div>
-       <h1>Hey World UPCOMING LOADING .........................</h1>
-     </div>
-      
-    ):(
-      <Upcoming/>
-    )}
-    </div>
+    <header>
+      <div className="container">
+        <nav>
+          <img src="/logo.svg" alt="" />
+          <MySearch />
+        </nav>
+      </div>
+    </header>
+    <main>
+      <Cover
+        count={count}
+        setCount={setCount}
+        cover={cover}
+        setCover={setCover}
+        upcoming={upcoming}
+      />
+      <section className="grid">
+        <div className="container">
+          <div className="top-rated">
+            <h1>Top Rated</h1>
+            <div className="cards">
+              {top.map((item) => 
+                 (
+                  <MyCard
+                    key={item.id}
+                    img={item.poster_path}
+                    name={item.title}
+                    overview={item.overview}
+                    release_date={item.release_date}
+                  />
+                )
+              )}
+            </div>
+          </div>
+          <div className="most-popular">
+            <h1>Most Popular</h1>
+            <div className="cards">
+              {popular.map((item) => 
+               (
+                  <MyCard
+                    key={item.id}
+                    img={item.poster_path}
+                    name={item.title}
+                    overview={item.overview}
+                    release_date={item.release_date}
+                  />
+                )
+              )}
+            </div>
+          </div>
+          <div className="upcoming">
+            <h1>Upcoming</h1>
+            <div className="cards">
+              {upcoming.map((item) => {
+                return (
+                  <MyCard
+                    key={item.id}
+                    img={item.poster_path}
+                    name={item.title}
+                    overview={item.overview}
+                    release_date={item.release_date}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
   );
 };
 export default Home;

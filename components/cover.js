@@ -1,27 +1,27 @@
-const Cover = ({ cover, setCover}) => {
+const Cover = ({ cover, setCover, count, setCount,upcoming}) => {
 
   const handlePrev=() => {
-    if (props.count == 1) return;
+    if (count == 1) return;
     else {
-      props.setCount(props.count - 1);
+      setCount(count - 1);
       setCover({
-        img: `http://image.tmdb.org/t/p/original${props.upcoming[props.count].backdrop_path}`,
-        title: props.upcoming[props.count].title,
-        year: props.upcoming[props.count].release_date,
-        popularity: props.upcoming[props.count].popularity,
+        img: `http://image.tmdb.org/t/p/original${upcoming[count].backdrop_path}`,
+        title: upcoming[count].title,
+        year: upcoming[count].release_date,
+        popularity: upcoming[count].popularity,
       });
     }
   }
   const handlNext=() => {
-    if (props.count == props.upcoming.length) {
-      props.setCount(1);
+    if (count == upcoming.length) {
+      setCount(1);
     } else {
-      props.setCount(props.count + 1);
+      setCount(count + 1);
       setCover({
-        img: `http://image.tmdb.org/t/p/original${props.upcoming[props.count].backdrop_path}`,
-        title: props.upcoming[props.count].title,
-        year: props.upcoming[props.count].release_date,
-        popularity: props.upcoming[props.count].popularity,
+        img: `http://image.tmdb.org/t/p/original${upcoming[count].backdrop_path}`,
+        title: upcoming[count].title,
+        year: upcoming[count].release_date,
+        popularity: upcoming[count].popularity,
       });
     }
   }
@@ -43,7 +43,7 @@ const Cover = ({ cover, setCover}) => {
               className="previous"
               onClick={handlePrev}
             ></button>
-            <p>{props.count}/20</p>
+            <p>{count}/20</p>
             <button
               className="next"
               onClick={handlNext}
